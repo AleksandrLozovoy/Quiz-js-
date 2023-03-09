@@ -41,6 +41,10 @@ function clearPage() {
 }
 
 function showQuestion() {
+  if (localStorage.getItem("index")) {
+    questionIndex = JSON.parse(localStorage.getItem("index"));
+  }
+
   const headerTemplate = `<h2 class="title">%title%</h2>`;
   const title = headerTemplate.replace(
     "%title%",
@@ -85,6 +89,7 @@ function checkAnswer() {
 
   if (questionIndex !== questions.length - 1) {
     questionIndex++;
+    saveToLocalStorage();
     clearPage();
     showQuestion();
     return;
@@ -123,9 +128,16 @@ function showResults() {
   submitBtn.blur();
   submitBtn.innerHTML = "Начать заново";
   submitBtn.addEventListener("click", () => {
+    questionIndex = 0;
+    saveToLocalStorage();
     history.go();
   });
 }
+
+function saveToLocalStorage() {
+  localStorage.setItem("index", JSON.stringify(questionIndex));
+}
+
 let score = 0;
 let questionIndex = 0;
 
